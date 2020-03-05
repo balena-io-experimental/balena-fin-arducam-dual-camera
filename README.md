@@ -13,4 +13,4 @@ balenaFin dual camera mode [enabled](https://www.balena.io/fin/1.1/docs/develope
 
 ## Usage
 
-Everytime the `arducam` service is started it snaps a picture from both camera interfaces and saves them in a shared volume the `webserver` service exposes via a static file web server. Simply point to the device Ip address or enable publicURL to brows the pictures taken. To snap again, restart the `arducam` service.
+Everytime the `arducam` service is started it snaps a picture from both camera interfaces and saves them in a shared volume the `webserver` service exposes via a static file web server. Simply point to the device IP address (or enable publicURL) to browse the pictures taken. To snap again, restart the `arducam` service.
