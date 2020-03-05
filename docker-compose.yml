@@ -1,0 +1,28 @@
+version: '2'
+volumes:
+    camera-data:
+services:
+  arducam:
+    build: ./arducam
+    volumes:
+      - 'camera-data:/data'
+    restart: always
+    privileged: true
+    network_mode: host
+    devices:
+      - "/dev/vchiq:/dev/vchiq"
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/fb0:/dev/fb0"
+      - "/dev/i2c-0:/dev/i2c-0"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.firmware: '1'
+      io.balena.features.sysfs: '1'
+      io.balena.features.procfs: '1'
+  webserver:
+    build: ./webserver
+    volumes:
+      - 'camera-data:/data'
+    restart: always
+    privileged: true
+    network_mode: host

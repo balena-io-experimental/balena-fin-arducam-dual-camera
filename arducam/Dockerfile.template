@@ -1,0 +1,40 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3-build
+
+# Defines our working directory in container
+WORKDIR /usr/src/app
+
+# install required packages
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+  libsdl-image1.2-dev \
+  libsdl-mixer1.2-dev \
+  libsdl-ttf2.0-dev \
+  libsdl1.2-dev \
+  libsmpeg-dev \
+  python-numpy \
+  subversion \
+  libportmidi-dev \
+  ffmpeg \
+  libswscale-dev \
+  libavformat-dev \
+  libavcodec-dev \
+  libfreetype6-dev \
+  libzbar-dev \
+  libopencv-dev \
+  python-opencv  \
+  rpi.gpio \
+  python-rpi.gpio \
+  wiringpi \
+  && git clone https://github.com/ArduCAM/RaspberryPi.git \
+  && git clone https://github.com/ArduCAM/MIPI_Camera.git \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY ./capture.c ./MIPI_Camera/RPI/capture.c
+COPY ./capture-dualcam.c ./MIPI_Camera/RPI/capture-dualcam.c
+COPY ./arducamstill.c ./MIPI_Camera/RPI/arducamstill.c
+COPY ./list_format.c ./MIPI_Camera/RPI/list_format.c
+RUN cd MIPI_Camera/RPI/ && make install && make clean && make && cd ../../
+
+# Move app to filesystem
+COPY ./app ./
+
+# Start app
+CMD ["bash", "/usr/src/app/start.sh"]
